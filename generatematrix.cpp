@@ -3,14 +3,14 @@
 int main(){
 	int elements=3;//specify how many elements are in the simulation
 	int pair=elements*(elements+1)/2;//how many pairs iteractions are in the simulation
-	int newelements=1;//which is the new elements. the parameter don't know, the tick go from 0 1 2 3 4 5 6 7
+	int newelements=2;//which is the new elements. the parameter don't know, the tick go from 0 1 2 3 4 5 6 7
 	int** matrix=new int* [pair];
 	for(size_t i=0;i<pair;i++){
 		matrix[i]=new int [12];
 	}
 	size_t count=0;
-	for(size_t i=0;i<elements;i++)
-		for(size_t j=i;j<elements;j++){
+	for(size_t i=1;i<=elements;i++)
+		for(size_t j=i;j<=elements;j++){
 			/*specify the bond valence itself*/
 			if(i==newelements && j==newelements){
 				matrix[count][0]=0;
