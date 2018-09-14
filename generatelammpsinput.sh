@@ -57,7 +57,7 @@ do
 	linenum=`expr $i + 1`;
 	para=`sed -n ${linenum}p $tempfile`;
 	para=($para);
-	echo "pair_coeff ${para[0]} ${para[1]} bvv ${para[2]} ${para[3]} ${para[10]} ${para[11]} ${para[7]}" >>$fileout;
+	echo "pair_coeff ${para[0]} ${para[1]} bvv ${para[2]} ${para[3]} ${para[12]} ${para[13]} ${para[7]}" >>$fileout;
 done
 ################## finishe printing out the bond valence vector term#############
 echo "">>$fileout;
