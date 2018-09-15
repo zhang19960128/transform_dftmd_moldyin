@@ -24,7 +24,7 @@ int main(){
 	out.open(outfile.c_str(),std::fstream::out);
 	std::string temp;
 	int start=0;
-	int end=300;
+	int end=start+300;
 	std::istringstream stream1;
 	std::string substr;
 	double posit;
