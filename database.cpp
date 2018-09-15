@@ -23,7 +23,8 @@ int main(){
 	std::fstream out;
 	out.open(outfile.c_str(),std::fstream::out);
 	std::string temp;
-	int tick=0;
+	int start=0;
+	int end=300;
 	std::istringstream stream1;
 	std::string substr;
 	double posit;
@@ -84,7 +85,7 @@ int main(){
 			}
 		}
 		else if(temp=="ATOMIC_POSITIONS (crystal)"){
-		out<<"******* Reduced ionic position : "<<tick<<std::endl;
+		out<<"******* Reduced ionic position : "<<start<<std::endl;
 		for(size_t i=0;i<40;i++){
 			 getline(dftout,temp);
 			 stream1.str(temp);
@@ -103,7 +104,6 @@ int main(){
 			 out<<std::endl;
 			 stream1.clear();
 		}
-		std::cout<<tick++<<std::endl;
 		out<<"******* Lattice unit vectors"<<std::endl;
 		for(size_t i=0;i<3;i++){
 		out<<std::fixed<<std::setprecision(15)<<std::setw(15)<<v3[i][0]<<"\t"<<std::fixed<<std::setprecision(15)<<std::setw(15)<<v3[i][1]<<"\t"<<std::fixed<<std::setprecision(15)<<std::setw(15)<<v3[i][2]<<std::endl;
@@ -128,6 +128,9 @@ int main(){
 		}
 		out<<"******* Weight "<<std::endl;
 		out<<"1.0"<<std::endl;
+		std::cout<<start++<<std::endl;
+		if(start==end) break;
 		}
 	}while(!dftout.eof());
+	out.close();
 }
