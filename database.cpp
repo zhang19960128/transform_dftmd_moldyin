@@ -6,7 +6,7 @@
 #include <vector>
 int main(int argc,char* argv[]){
 	int interval=1;
-	std::string dftoutfile="relax.out";
+	std::string dftoutfile=argv[1];
 	std::string outfile="IonFor.dat.MD.jiahao";
 	int natom=40;
 	int nline=41;
@@ -125,6 +125,8 @@ out<<"******* Lattice unit vectors"<<std::endl;
 		}
 		out<<"******* Weight "<<std::endl;
 		out<<"1.0"<<std::endl;
+		std::cout<<start++<<std::endl;
+		if(start==end) break;
 		}
 		else if(temp=="ATOMIC_POSITIONS (angstrom)"){
 			out<<"******* Reduced ionic position : "<<start<<std::endl;
