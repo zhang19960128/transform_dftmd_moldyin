@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/usr/bin/env python
 import random
 import sys
 import math
@@ -42,10 +42,10 @@ def typein(index,Asite):
 	return a;
 fraction=1.0;
 cell=2;'''here are the period on x y z cell length'''
-ba_valen=1.34730;
-ca_valen=1.34730;
-zr_valen="1.28904";
-ox_valen="-0.87878";
+ba_valen=sys.argv[1];
+ca_valen=sys.argv[1];
+zr_valen=sys.argv[2];
+ox_valen=sys.argv[3];
 calist=random.sample(range(cell*cell*cell),int(cell*cell*cell*fraction));
 calist=sorted(calist);
 ca=open("cadata.txt","w");
@@ -69,9 +69,8 @@ data.write("\n");
 data.write("Masses\n");
 data.write("\n");
 data.write("1 137.327  #Ba\n");
-data.write("2 40.078  #Ca\n");
-data.write("3 91.224 #Zr\n");
-data.write("4 15.9993  #o\n");
+data.write("2 91.224 #Zr\n");
+data.write("3 15.9993  #o\n");
 data.write("\n");
 '''
 angle type
