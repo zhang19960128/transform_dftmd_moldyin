@@ -72,18 +72,12 @@ echo "#group Ti id 513:1024">>$fileout
 echo "#group O1 id 1025:1536">>$fileout
 echo "#group O2 id 1537:2048">>$fileout
 echo "#group O3 id 2049:2560">>$fileout
-echo "thermo          100">>$fileout
+echo "thermo          1">>$fileout
 echo "thermo_style custom step temp eangle etotal press vol lx ly lz">>$fileout
 echo "thermo_modify line one format float %12.5f">>$fileout
 echo "">>$fileout
 echo "">>$fileout
 echo "fix 1 all nvt temp 5.0 5.0 1.0">>$fileout
-echo "run 50000">>$fileout
+echo "run 5">>$fileout
 echo "unfix 1">>$fileout
 echo "">>$fileout
-echo "fix             4 all npt temp 5.0 5.0 1.0 aniso 1.01325 1.01325 5.0">>$fileout
-echo "dump            4 all custom 200 dump.xyz x y z">>$fileout
-echo "dump_modify     4 sort id">>$fileout
-echo "run 50000">>$fileout
-echo "unfix 4">>$fileout
-echo "write_restart BTO.restart2">>$fileout
