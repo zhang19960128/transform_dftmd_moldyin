@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python
 import random
 import sys
 import math
@@ -60,7 +60,7 @@ data.write(str(3*cell*cell*cell)+" angles\n");
 data.write("3 atom types\n");
 data.write("6 angle types\n");
 data.write("\n");
-cell_length=4.14;
+cell_length=8.386494280/2;
 data.write("0.0 "+str(cell_length*cell)+" "+"xlo xhi\n");
 data.write("0.0 "+str(cell_length*cell)+" "+"ylo yhi\n");
 data.write("0.0 "+str(cell_length*cell)+" "+"zlo zhi\n");
@@ -72,6 +72,7 @@ data.write("1 137.327  #Ba\n");
 data.write("2 91.224 #Zr\n");
 data.write("3 15.9993  #o\n");
 data.write("\n");
+data.write("\n")
 '''
 angle type
 here 0 BBBB 1.37953

@@ -1,9 +1,15 @@
 #/bin/bash
 tempfile="temp_file.txt";
-tac control.opt | grep -B30 -m1 "Potential parameters" | tac | grep -v "Potential parameters" >$tempfile;
-line=`tac control.opt | grep -B30 -m1 "Potential parameters" | tac | grep -v "Potential parameters" | wc -l`;
-pair=`bc <<< "($line-8)/2"`;
+tac control.opt | grep -B20 -m1 "Potential parameters" | tac | grep -v "Potential parameters" >$tempfile;
+line=`tac control.opt | grep -B20 -m1 "Potential parameters" | tac | grep -v "Potential parameters" | wc -l`;
+pair=`bc <<< "($line-6)/2"`;
 echo $pair
+charge_num=`expr $pair + 3`;
+charge=`sed -n "${charge_num}p" $tempfile`
+./generate3.py $charge
+charge=($charge);
+echo ${charge[2]};
+sed -i "s/charge\=sys\.argv\[3\]/charge\=${charge[2]}/g" rotate.py
 fileout="test.lammpsinput"
 if [ -f $fileout ]
 then
@@ -17,7 +23,7 @@ echo " ">>$fileout
 echo "units     metal" >>$fileout
 echo "atom_style full" >>$fileout
 echo "boundary p p p"  >>$fileout
-echo "kspace_style pppm 1.0e-4" >>$fileout
+echo "kspace_style pppm 1.0e-10" >>$fileout
 echo "pair_style hybrid/overlay  12lj/cut/coul/long 8.0 8.0 bv 2.0 8.0 bvv 2.0 8.0" >>$fileout
 echo "angle_style harmonic" >>$fileout
 echo "read_data mixdata.BTO" >>$fileout
@@ -72,18 +78,12 @@ echo "#group Ti id 513:1024">>$fileout
 echo "#group O1 id 1025:1536">>$fileout
 echo "#group O2 id 1537:2048">>$fileout
 echo "#group O3 id 2049:2560">>$fileout
-echo "thermo          100">>$fileout
+echo "thermo          1">>$fileout
 echo "thermo_style custom step temp eangle etotal press vol lx ly lz">>$fileout
 echo "thermo_modify line one format float %12.5f">>$fileout
 echo "">>$fileout
 echo "">>$fileout
 echo "fix 1 all nvt temp 5.0 5.0 1.0">>$fileout
-echo "run 50000">>$fileout
+echo "run 5">>$fileout
 echo "unfix 1">>$fileout
 echo "">>$fileout
-echo "fix             4 all npt temp 5.0 5.0 1.0 aniso 1.01325 1.01325 5.0">>$fileout
-echo "dump            4 all custom 200 dump.xyz x y z">>$fileout
-echo "dump_modify     4 sort id">>$fileout
-echo "run 50000">>$fileout
-echo "unfix 4">>$fileout
-echo "write_restart BTO.restart2">>$fileout
