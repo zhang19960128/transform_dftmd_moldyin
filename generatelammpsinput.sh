@@ -1,8 +1,15 @@
 #/bin/bash
 tempfile="temp_file.txt";
-tac control.opt | grep -B20 -m1 "Potential parameters" | tac | grep -v "Potential parameters" >$tempfile;
-line=`tac control.opt | grep -B20 -m1 "Potential parameters" | tac | grep -v "Potential parameters" | wc -l`;
-pair=`bc <<< "($line-6)/2"`;
+tac control.opt | grep -B30 -m1 "Potential parameters" | tac | grep -v "Potential parameters" >$tempfile;
+line=`tac control.opt | grep -B30 -m1 "Potential parameters" | tac | grep -v "Potential parameters" | wc -l`;
+if [ $line == 28 ]
+then
+	sub=8
+elif [ $line == 18]
+then
+	sub=6
+fi
+pair=`bc <<< "($line-$sub)/2"`;
 echo $pair
 charge_num=`expr $pair + 3`;
 charge=`sed -n "${charge_num}p" $tempfile`
