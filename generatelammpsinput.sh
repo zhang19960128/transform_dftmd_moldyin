@@ -85,7 +85,7 @@ echo "#group Ti id 513:1024">>$fileout
 echo "#group O1 id 1025:1536">>$fileout
 echo "#group O2 id 1537:2048">>$fileout
 echo "#group O3 id 2049:2560">>$fileout
-echo "thermo          1">>$fileout
+echo "thermo          100">>$fileout
 echo "thermo_style custom step temp eangle etotal press vol lx ly lz">>$fileout
 echo "thermo_modify line one format float %12.5f">>$fileout
 echo "">>$fileout
