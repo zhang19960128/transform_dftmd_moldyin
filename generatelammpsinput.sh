@@ -30,7 +30,7 @@ echo " ">>$fileout
 echo "units     metal" >>$fileout
 echo "atom_style full" >>$fileout
 echo "boundary p p p"  >>$fileout
-echo "kspace_style pppm 1.0e-10" >>$fileout
+echo "kspace_style pppm 1.0e-4" >>$fileout
 echo "pair_style hybrid/overlay  12lj/cut/coul/long 8.0 8.0 bv 2.0 8.0 bvv 2.0 8.0" >>$fileout
 echo "angle_style harmonic" >>$fileout
 echo "read_data mixdata.BTO" >>$fileout
