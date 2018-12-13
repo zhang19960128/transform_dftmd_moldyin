@@ -21,7 +21,7 @@ int main(int argc,char* argv[]){
 	out.open(outfile.c_str(),std::fstream::out);
 	std::string temp;
 	int start=0;
-	int end=start+300;
+	int end=start+8000;
 	std::istringstream stream1;
 	std::string substr;
 	double posit;
@@ -29,6 +29,14 @@ int main(int argc,char* argv[]){
 	std::vector<std::vector<double> > v3(3,v1);
 	std::vector<std::vector<double> > pressure(3,v1);
 	std::vector<std::vector<double> > force(natom,v1);
+    for(size_t i=0;i<3;i++)
+        for(size_t j=0;j<3;j++){
+            if(i!=j)
+                v3[i][j]=0;
+        }
+    v3[0][0]=8.9258090014;
+    v3[1][1]=8.9258090014;
+    v3[2][2]=12.623000144;
 	double total_energy;
 	do{
 		getline(dftout,temp);
