@@ -2,6 +2,7 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <istream>
 #include <complex.h>
 #include <fftw3.h>
 double innerprod(std::list<double*>& ve_list,int atomnum,size_t framei,size_t framej){
