@@ -1,10 +1,12 @@
-#include "autospeed.h"
 #include <list>
+#include <vector>
 #include <iostream>
 #include <fstream>
 #include <istream>
 #include <complex.h>
 #include <fftw3.h>
+#include <string>
+#include <math.h>
 double innerprod(std::list<double*>& ve_list,int atomnum,size_t framei,size_t framej){
 	double sum=0.0;
 	std::list<double*>::iterator framei_iterator=ve_list.begin();
@@ -60,4 +62,42 @@ void autospeed(std::list<double*>& ve_list,int atomnum){
 	}
 	fftw_destroy_plan(p);
 	fftw_free(out);
+}
+int main(){
+	double timestep=1.0;//timestep 1fs
+	int atomnum=48;
+	std::vector<double> old_position(atomnum*3,0.0);
+	std::vector<double> new_position(atomnum*3,0.0);
+	double* velocity_temp;
+	std::list<double* > velocity;
+	double temp_double;
+	std::string temp_string;
+	std::fstream fs;
+	std::isstringstream stream_temp;
+	fs.open("IonFor.dat.MD.jiahao",std::fstream::in);
+	while(getline(fs,temp_string)){
+		if(temp_string.find("Reduced ionic position")!=std::string::npos){
+			for(size_t i=0;i<atomnum*3;i++){
+				old_position[i]=new_position[i];
+			}
+			for(size_t i=0;i<atomnum;i++){
+				stream_temp.clear();
+				getline(fs,temp_string);
+				stream_temp.clear();
+				stream_temp.str(temp_string);
+				for(size_t j=0;j<3;j++){
+					stream_temp>>new_position[3*i+j];
+				}
+				stream_temp.clear();
+			}
+			velocity_temp=new double [atomnum*3];
+			for(size_t i=0;i<atomnum*3;i++){
+				temp_double=new_position[i]-old_position[i];
+				velocity_temp[i]=temp_double-round(temp_double);
+			}
+		}
+	}
+	for(std::list<double* >::iterator a=velocity.begin();a!=velocity.end();a++){
+		delete *a [];
+	}
 }
