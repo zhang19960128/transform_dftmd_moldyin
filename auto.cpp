@@ -32,25 +32,17 @@ double autocorre(std::list<double*>& ve_list,int atomnum,size_t interval){
 }
 void autospeed(std::list<double*>& ve_list,int atomnum){
 	size_t len=ve_list.size();
-	/*
-	 * this part is used to test whether the output is what we want.
-	for(std::list<double*>::iterator i=ve_list.begin();i!=ve_list.end();i++){
-		for(int j=0;j<5*3*cell*cell*cell;j++){
-				if(j%3==0){
-					std::cout<<std::endl;
-				}
-				std::cout<<*((*i)+j)<<" ";
-		}
-	}
-	*/
 	std::fstream autoout;
 	autoout.open("autocorrelation_of_velocity.txt",std::fstream::out);
 	double* in=new double[len];
-	double temp=0.0;
-	for(size_t i=0;i<len-1;i++){
-		temp=autocorre(ve_list,atomnum,i);
-		autoout<<temp<<std::endl;
-	  in[i]=temp;
+	std::vector<std::vector<double> >allvelocity(len,std::vector<double>(atomnum*3,0.0));
+	for(struct{std::list<double* >::iterator a;size_t i;} s={ve_list.begin(),0};s.a!=ve_list.end();s.a++,s.i++){
+		for(size_t j=0;j<atomnum*3;j++){
+			allvelocity[s.i][j]=(*s.a)[j];
+		}
+	}
+	for(size_t i=0;i<len;i++){
+		in[i]=allvelocity[i][0];
 	}
 	fftw_complex *out;/* Output */
 	fftw_plan p;/*Plan*/
@@ -68,7 +60,7 @@ int main(){
 	int atomnum=48;
 	std::vector<double> old_position(atomnum*3,0.0);
 	std::vector<double> new_position(atomnum*3,0.0);
-	std::vector<std::vector<double>(3,0.0) > unit_vector(3);
+	std::vector<std::vector<double> > unit_vector(3,std::vector<double>(3,0.0));
 	double* velocity_temp;
 	std::list<double* > velocity;
 	double temp_double;
@@ -77,7 +69,7 @@ int main(){
 	double double_z;
 	std::string temp_string;
 	std::fstream fs;
-	std::isstringstream stream_temp;
+	std::istringstream stream_temp;
 	fs.open("IonFor.dat.MD.jiahao",std::fstream::in);
 	while(getline(fs,temp_string)){
 		if(temp_string.find("Reduced ionic position")!=std::string::npos){
@@ -109,7 +101,7 @@ int main(){
 					stream_temp>>unit_vector[i][j];
 				}
 			}
-			for(size_i=0;i<atomnum;i++){
+			for(size_t i=0;i<atomnum;i++){
 				double_x=0.0;
 				double_y=0.0;
 				double_z=0.0;
@@ -125,6 +117,7 @@ int main(){
 			velocity.push_back(velocity_temp);
 		}
 	}
+	autospeed(velocity,atomnum);
 	for(std::list<double* >::iterator a=velocity.begin();a!=velocity.end();a++){
 		delete [] *a;
 	}
