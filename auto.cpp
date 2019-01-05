@@ -32,8 +32,6 @@ double autocorre(std::list<double*>& ve_list,int atomnum,size_t interval){
 }
 void autospeed(std::list<double*>& ve_list,int atomnum){
 	size_t len=ve_list.size();
-	std::fstream autoout;
-	autoout.open("autocorrelation_of_velocity.txt",std::fstream::out);
 	double* in=new double[len];
 	std::vector<std::vector<double> >allvelocity(len,std::vector<double>(atomnum*3,0.0));
 	for(struct{std::list<double* >::iterator a;size_t i;} s={ve_list.begin(),0};s.a!=ve_list.end();s.a++,s.i++){
@@ -44,15 +42,37 @@ void autospeed(std::list<double*>& ve_list,int atomnum){
 	for(size_t i=0;i<len;i++){
 		in[i]=allvelocity[i][0];
 	}
-	fftw_complex *out;/* Output */
+	fftw_complex *out,*outall;/* Output */
 	fftw_plan p;/*Plan*/
-	out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex)*(len/2+1));
-	p=fftw_plan_dft_r2c_1d(len,in,out,FFTW_ESTIMATE);
-	fftw_execute(p);
+	out=(fftw_complex* ) fftw_malloc(sizeof(fftw_complex)*(len/2+1));
+	outall=(fftw_complex* )fftw_malloc(sizeof(fftw_complex)*(len/2+1));
+	std::fstream power_spectra;
+	power_spectra.open("power.txt",std::fstream::out);
 	for(size_t i=0;i<len/2+1;i++){
-		std::cout<<out[i][0]<<" "<<out[i][1]<<std::endl;
+		outall[i][0]=0.0;
+		outall[i][1]=0.0;
 	}
-	fftw_destroy_plan(p);
+	for(size_t i=0;i<atomnum*3;i++){
+		for(size_t j=0;j<len;j++){
+			in[j]=allvelocity[j][i];
+		}
+		p=fftw_plan_dft_r2c_1d(len,in,out,FFTW_ESTIMATE);
+		for(size_t j=0;j<len/2+1;j++){
+			outall[j][0]=outall[j][0]+out[j][0];
+			outall[j][1]=outall[j][1]+out[j][1];
+		}
+		fftw_execute(p);
+		fftw_destroy_plan(p);
+	}
+	for(size_t i=0;i<len/2+1;i++){
+		outall[i][0]=outall[i][0]/(len/2+1);
+		outall[i][1]=outall[i][1]/(len/2+1);
+	}
+	power_spectra<<"Freqeucy(cm^-1) Amplitude"<<std::endl;
+	for(size_t i=0;i<len/2+1;i++){
+		//0.029999 transform Thz to cm^-1
+		power_spectra<<i/(len+0.0)*2*3.141592653*1000*33.356<<" "<<sqrt(outall[i][0]*outall[i][0]+outall[i][1]*outall[i][1])<<std::endl;
+	}
 	fftw_free(out);
 }
 int main(){
