@@ -68,9 +68,13 @@ int main(){
 	int atomnum=48;
 	std::vector<double> old_position(atomnum*3,0.0);
 	std::vector<double> new_position(atomnum*3,0.0);
+	std::vector<std::vector<double>(3,0.0) > unit_vector(3);
 	double* velocity_temp;
 	std::list<double* > velocity;
 	double temp_double;
+	double double_x;
+	double double_y;
+	double double_z;
 	std::string temp_string;
 	std::fstream fs;
 	std::isstringstream stream_temp;
@@ -93,11 +97,35 @@ int main(){
 			velocity_temp=new double [atomnum*3];
 			for(size_t i=0;i<atomnum*3;i++){
 				temp_double=new_position[i]-old_position[i];
-				velocity_temp[i]=temp_double-round(temp_double);
+				velocity_temp[i]=(temp_double-round(temp_double))/timestep;
 			}
+		}
+		if(temp_string.find("Lattice unit vectors")!=std::string::npos){
+			for(size_t i=0;i<3;i++){
+				getline(fs,temp_string);
+				stream_temp.clear();
+				stream_temp.str(temp_string);
+				for(size_t j=0;j<3;j++){
+					stream_temp>>unit_vector[i][j];
+				}
+			}
+			for(size_i=0;i<atomnum;i++){
+				double_x=0.0;
+				double_y=0.0;
+				double_z=0.0;
+				for(size_t j=0;j<3;j++){
+					double_x=double_x+velocity_temp[3*i+j]*unit_vector[j][0];
+					double_y=double_y+velocity_temp[3*i+j]*unit_vector[j][1];
+					double_z=double_x+velocity_temp[3*i+j]*unit_vector[j][2];
+				}
+				velocity_temp[3*i+0]=double_x;
+				velocity_temp[3*i+1]=double_y;
+				velocity_temp[3*i+2]=double_z;
+			}
+			velocity.push_back(velocity_temp);
 		}
 	}
 	for(std::list<double* >::iterator a=velocity.begin();a!=velocity.end();a++){
-		delete *a [];
+		delete [] *a;
 	}
 }
