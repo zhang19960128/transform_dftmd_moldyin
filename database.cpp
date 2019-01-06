@@ -7,9 +7,8 @@
 int main(int argc,char* argv[]){
 	int interval=1;
 	std::string dftoutfile=argv[1];
-	std::string outfile="IonFor.dat.MD.jiahao";
-	int natom=40;
-	int nline=41;
+	std::string outfile=argv[2];
+	int natom=48;
 	/*units that are useful*/
 	double bohr=0.529177249;
 	double ha=27.2113845;
@@ -51,7 +50,7 @@ int main(int argc,char* argv[]){
 		}
 		else if(temp.find("Forces acting on atoms (cartesian axes, Ry/au):")!=std::string::npos){
 			getline(dftout,temp);
-			for(size_t i=0;i<40;i++){
+			for(size_t i=0;i<natom;i++){
 			getline(dftout,temp);
 			stream1.str(temp);
 			stream1>>substr;//atom
@@ -91,7 +90,7 @@ int main(int argc,char* argv[]){
 		}
 		else if(temp=="ATOMIC_POSITIONS (crystal)"){
 		out<<"******* Reduced ionic position : "<<start<<std::endl;
-		for(size_t i=0;i<40;i++){
+		for(size_t i=0;i<natom;i++){
 			 getline(dftout,temp);
 			 stream1.str(temp);
 			 stream1>>substr;
@@ -138,7 +137,7 @@ out<<"******* Lattice unit vectors"<<std::endl;
 		}
 		else if(temp=="ATOMIC_POSITIONS (angstrom)"){
 			out<<"******* Reduced ionic position : "<<start<<std::endl;
-	  	for(size_t i=0;i<40;i++){
+	  	for(size_t i=0;i<natom;i++){
 			 getline(dftout,temp);
 			 stream1.str(temp);
 			 stream1>>substr;
