@@ -71,7 +71,7 @@ void autospeed(std::list<double*>& ve_list,int atomnum){
 	power_spectra<<"Freqeucy(cm^-1) Amplitude"<<std::endl;
 	for(size_t i=0;i<len/2+1;i++){
 		//0.029999 transform Thz to cm^-1
-		power_spectra<<i/(len+0.0)*2*3.141592653*1000*33.356<<" "<<sqrt(outall[i][0]*outall[i][0]+outall[i][1]*outall[i][1])<<std::endl;
+		power_spectra<<i/(len+0.0)*2*3.141592653*1000*33.356<<" "<<outall[i][0]*outall[i][0]+outall[i][1]*outall[i][1]<<std::endl;
 	}
 	fftw_free(out);
 }
