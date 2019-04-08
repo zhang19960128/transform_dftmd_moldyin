@@ -50,10 +50,11 @@ int main(int argc,char* argv[]){
                 fout<<posit_before[i][j]<<" ";
               }
               fout<<std::endl;
-              tick++;
             }
+            tick++;
             }
             else{
+                std::cout<<"I am here"<<std::endl;
                 for(int i=0;i<5*cell*cell*cell;i++){
                     getline(fin,line);
                     fs_temp.clear();
@@ -63,7 +64,7 @@ int main(int argc,char* argv[]){
                         if(posit_now[i][j]-posit_before[i][j]>period[j]/2.0){
                             posit_now[i][j]=posit_now[i][j]-period[j];
                         }
-                        else if(posit_now[i][j]-posit_before[i][j]<period[j]/2.0){
+                        else if(posit_now[i][j]-posit_before[i][j]<-period[j]/2.0){
                             posit_now[i][j]=posit_now[i][j]+period[j];
                         }
                         else{
@@ -72,6 +73,7 @@ int main(int argc,char* argv[]){
                     }
                     fout<<std::endl;
                 }
+                tick++;
             }
         }
     }
