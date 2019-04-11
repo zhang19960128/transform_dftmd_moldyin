@@ -2,19 +2,20 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <fftw3.h>
 int main(int argc,char* argv[]){
     double px[2]={0.0,0.0};
     double py[2]={0.0,0.0};
     double pz[2]={0.0,0.0};
     double period[3]={0.0,0.0,0.0};
-    std::string filein=argv[1];
+    std::string filein=argv[2];
     std::string fileout=filein+".after.PBC";
     std::fstream fin,fout;
     fin.open(filein.c_str(),std::fstream::in);
     fout.open(fileout.c_str(),std::fstream::out);
     std::string line;
     std::istringstream fs_temp;
-    int cell=std::stoi(argv[2]);
+    int cell=std::stoi(argv[1]);
     int tick=0;
     double posit_before[cell*cell*cell*5][3];
     double posit_now[cell*cell*cell*5][3];
@@ -79,4 +80,45 @@ int main(int argc,char* argv[]){
     }
     fin.close();
     fout.close();
+    /*start to FFT the trajectory*/
+    std::fstream fs_traject;
+    fs_traject.open("dump.xyz.after.PBC",std::fstream::in);
+    int variable=5*cell*cell*cell*3;
+    tick=0;
+    while(getline(fs_traject,line)){
+        tick=tick+1;
+    }
+    fs_traject.close();
+    int timeframe=tick/5/cell/cell/cell;
+    double* traject[timeframe];
+    for(size_t i=0;i<timeframe;i++){
+        traject[i]=new double[variable];
+    }
+    fs_traject.open("dump.xyz.after.PBC",std::fstream::in);
+    for(size_t i=0;i<timeframe;i++){
+        for(size_t j=0;j<variable;j++){
+            fs_traject>>traject[i][j];
+        }
+    }
+    fs_traject.close();
+    int fftw_out_count=timeframe;
+    double in[timeframe];
+    fftw_complex* out;
+    fftw_plan p;
+    out=(fftw_complex*) fftw_malloc(sizeof(fftw_complex)*(timeframe/2+1));
+    std::fstream fs_fft_out;
+    fs_fft_out.open("mode_filter_result.txt",std::fstream::out);
+    for(size_t i=0;i<variable;i++){
+        for(size_t j=0;j<timeframe;j++){
+            in[j]=traject[j][i];
+        }
+        p=fftw_plan_dft_r2c_1d(timeframe,in,out,FFTW_ESTIMATE);
+        fftw_execute(p);
+        for(size_t j=0;j<timeframe/2+1;j++){
+             fs_fft_out<<out[j][0]<<" "<<out[j][1]<<std::endl;
+         }
+        fftw_destroy_plan(p);
+    }
+    fs_fft_out.close();
+    /*****************************************/
 }
